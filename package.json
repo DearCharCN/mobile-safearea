@@ -2,7 +2,7 @@
 "name": "com.dc.mobile-safearea",
 "displayName": "Mobile Safe Area",
 "description": "获取移动设备刘海屏的高度",
-"version": "1.0.0",
+"version": "1.0.2",
 "unity": "2020.3",
 "dependencies": {
  }
