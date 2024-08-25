@@ -37,7 +37,7 @@ namespace SafeArea
 
         private static float GetOffsetUnitOnApple()
         {
-            return 0.08f;
+            return NativeBridge.getOutsideHeightUnit();
         }
     }
 }

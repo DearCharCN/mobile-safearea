@@ -1,3 +1,7 @@
+#if UNITY_IOS
+using System.Runtime.InteropServices;
+#endif
+
 namespace SafeArea
 {
     public class NativeBridge
@@ -77,13 +81,27 @@ namespace SafeArea
     {
         int NativeClass.getOutsideHeight()
         {
-            return 0;
+            float heightF = getNotchHeight();
+            int result = (int)heightF;
+            UnityEngine.Debug.Log($"刘海高度为{heightF}");
+            return result;
         }
 
         float NativeClass.getOutsideHeightUnit()
         {
-            return 0;
+            float result = getNotchPercentage();
+            UnityEngine.Debug.Log($"刘海占比{result}");
+            return result;
         }
+
+        [DllImport("__Internal")]
+        private static extern float getScreenHeight();
+
+        [DllImport("__Internal")]
+        private static extern float getNotchHeight();
+
+        [DllImport("__Internal")]
+        private static extern float getNotchPercentage();
     }
 #else
 
