@@ -57,13 +57,18 @@ namespace SafeArea.UI
                     case ScreenDirection.PortraitUpsideDown:
                         offset = rect.height * offsetUnit;
                         break;
-                    case ScreenDirection.LandscapeRight:
                     case ScreenDirection.LandscapeLeft:
+                    case ScreenDirection.LandscapeRight:
                         offset = rect.width * offsetUnit;
                         break;
                 }
             }
             AdjustSize(offset, screenDirection);
+        }
+
+        public void OnResolutionChanged()
+        {
+            ApplySafeOffset();
         }
 
         private void AdjustSize(float offset, ScreenDirection dir)
@@ -80,11 +85,11 @@ namespace SafeArea.UI
                     rectTransform.sizeDelta = new Vector2(0, -offset);
                     rectTransform.anchoredPosition = new Vector2(0, offset / 2f);
                     break;
-                case ScreenDirection.LandscapeRight:
+                case ScreenDirection.LandscapeLeft:
                     rectTransform.sizeDelta = new Vector2(-offset, 0);
                     rectTransform.anchoredPosition = new Vector2(-offset / 2f, 0);
                     break;
-                case ScreenDirection.LandscapeLeft:
+                case ScreenDirection.LandscapeRight:
                     rectTransform.sizeDelta = new Vector2(-offset, 0);
                     rectTransform.anchoredPosition = new Vector2(offset / 2f, 0);
                     break;

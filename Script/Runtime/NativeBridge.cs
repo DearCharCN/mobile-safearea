@@ -8,26 +8,6 @@ using UnityEngine;
 
 namespace SafeArea
 {
-    public enum ScreenDirection
-    {
-        /// <summary>
-        /// 竖屏
-        /// </summary>
-        Portrait = 1,
-        /// <summary>
-        /// 倒竖屏
-        /// </summary>
-        PortraitUpsideDown = 2,
-        /// <summary>
-        /// 横向（刘海在左）
-        /// </summary>
-        LandscapeRight = 3,
-        /// <summary>
-        /// 横向（刘海在右）
-        /// </summary>
-        LandscapeLeft = 4,
-    }
-
     public class NativeBridge
     {
         private static NativeClass m_nativeClass;
@@ -46,10 +26,15 @@ namespace SafeArea
 
         private static NativeClass GetNativeClass()
         {
+
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+
 #if UNITY_ANDROID
             return new AndroidNativeClass();
 #elif UNITY_IOS
             return new AppleNativeClass();
+#endif
+
 #else
             return new StandardNativeClass();
 #endif
@@ -87,6 +72,9 @@ namespace SafeArea
 
             void RemoveListenResolutionChanged();
         }
+
+#if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
+
 #if UNITY_ANDROID
 
         public class AndroidNativeClass : NativeClass
@@ -131,13 +119,13 @@ namespace SafeArea
             {
                 AndroidJavaRunnable runnable = new AndroidJavaRunnable(onResolutionChanged);
                 var currentActivity = GetCurrentActivity();
-                int nativeResult = javaClass.Call<int>("addListenResolutionChanged", currentActivity, runnable);
+                javaClass.Call("addListenResolutionChanged", currentActivity, runnable);
             }
 
             void NativeClass.RemoveListenResolutionChanged()
             {
                 var currentActivity = GetCurrentActivity();
-                int nativeResult = javaClass.Call<int>("removeListenResolutionChanged");
+                javaClass.Call("removeListenResolutionChanged");
             }
         }
 
@@ -177,8 +165,8 @@ namespace SafeArea
             [DllImport("__Internal")]
             private static extern float getNotchPercentage();
         }
+#endif
 #else
-
         public class StandardNativeClass : NativeClass
         {
             int NativeClass.getOutsideHeight()
@@ -193,7 +181,7 @@ namespace SafeArea
 
             ScreenDirection NativeClass.GetScreenDirection()
             {
-                switch(Screen.orientation)
+                switch (Screen.orientation)
                 {
                     case ScreenOrientation.Portrait:
                         return ScreenDirection.Portrait;
@@ -216,7 +204,6 @@ namespace SafeArea
             {
             }
         }
-
 #endif
     }
 }

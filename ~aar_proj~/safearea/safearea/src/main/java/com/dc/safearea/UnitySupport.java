@@ -1,5 +1,6 @@
 package com.dc.safearea;
 
+import android.util.Log;
 import android.app.Activity;
 import android.os.Build;
 import android.util.DisplayMetrics;
@@ -14,7 +15,7 @@ import android.content.res.Configuration;
 /** @noinspection LossyEncoding*/
 public class UnitySupport {
 
-    //获取刘海高度 单位：像�?
+    //获取刘海高度 单位：像素
     public int getOutsideHeight(Activity activity){
         int result = 0;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -77,37 +78,49 @@ public class UnitySupport {
         return  metric.heightPixels;
     }
 
+    private static final String TAG   = "Linear";
+
     //获取屏幕方向
-    //返回�?
-    //1 正竖�?
-    //2 倒竖�?
-    //3 正横�?
-    //4 倒横�?
+    //返回屏幕方向
+    //1 正竖屏
+    //2 倒竖屏
+    //3 正横屏
+    //4 倒横屏
     public int getScreenDiraction(Activity activity)
     {
         // 获取当前屏幕方向
         int orientation = activity.getResources().getConfiguration().orientation;
         int rotation = ((WindowManager) activity.getSystemService(Activity.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
-
+        //Log.e(TAG, "=====orientation====="+orientation);
+        //Log.e(TAG, "=====rotation====="+rotation);
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             if (rotation == Surface.ROTATION_0) {
                 return  1;
             } else if (rotation == Surface.ROTATION_180) {
                 return  2;
+            }else if (rotation == Surface.ROTATION_90) {
+                return  3;
+            } else if (rotation == Surface.ROTATION_270) {
+                return  4;
             }
         } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (rotation == Surface.ROTATION_90) {
+            if (rotation == Surface.ROTATION_0) {
+                return  3;
+            } else if (rotation == Surface.ROTATION_180) {
+                return  4;
+            }else if (rotation == Surface.ROTATION_90) {
                 return  3;
             } else if (rotation == Surface.ROTATION_270) {
                 return  4;
             }
         }
+
         return  0;
     }
 
     ScreenResolutionMonitor resolutionChangedHandle;
     //注册 监听屏幕分辨率变化（折叠屏）
-    public void addListenResolutionChanged(Activity activity,Runnable onResolutionChange)
+    public void addListenResolutionChanged(Activity activity,java.lang.Runnable onResolutionChange)
     {
         removeListenResolutionChanged();
         resolutionChangedHandle = new ScreenResolutionMonitor(activity);

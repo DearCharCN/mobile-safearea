@@ -65,6 +65,20 @@ namespace SafeArea
             needRefreshOnResolutionChanged = true;
         }
 
+        private void PerformResolutionChangedWithUnityThread()
+        {
+            DistriputeResolutionChanged();
+            SafeAreaUtls.PerformResolutionChanged();
+        }
+
+        private void DistriputeResolutionChanged()
+        {
+            foreach (SafeAreaComponent component in components.Keys)
+            {
+                component.OnResolutionChanged();
+            }
+        }
+
         public class SafeAreaDriver:MonoBehaviour
         {
             private void Update()
@@ -72,7 +86,7 @@ namespace SafeArea
                 if (SafeAreaComponentMgr.Ins.needRefreshOnResolutionChanged)
                 {
                     SafeAreaComponentMgr.Ins.needRefreshOnResolutionChanged = false;
-                    SafeAreaComponentMgr.Ins.RefreshAllComponents();
+                    SafeAreaComponentMgr.Ins.PerformResolutionChangedWithUnityThread();
                 }
             }
         }
