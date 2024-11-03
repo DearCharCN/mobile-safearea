@@ -39,6 +39,19 @@ tasks.register("exportToUnity", Copy) {
     dependsOn("assembleRelease")
 }
 
+tasks.named("build") {
+    dependsOn("exportToUnity")
+}
+
+sourceSets {
+    test {
+        java.srcDirs = []
+    }
+    androidTest {
+        java.srcDirs = []
+    }
+}
+
 dependencies {
     implementation("androidx.annotation:annotation:1.3.0")
 }
