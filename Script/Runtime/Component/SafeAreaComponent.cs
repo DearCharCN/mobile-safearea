@@ -44,26 +44,51 @@ namespace SafeArea.UI
 
         public void ApplySafeOffset()
         {
-            float topUnit = SafeAreaUtls.GetTopOffsetUnit();
+            float offsetUnit = SafeAreaUtls.GetTopOffsetUnit();
+            float offset = 0;
+            ScreenDirection screenDirection = SafeAreaUtls.GetScreenDirection();
             Canvas rootCanvas = GetRootCanvas();
             if (rootCanvas != null)
             {
                 var rect = rootCanvas.pixelRect;
-                float topOffset = rect.height * topUnit;
-                AdjustSize(topOffset);
+                switch (screenDirection)
+                {
+                    case ScreenDirection.Portrait:
+                    case ScreenDirection.PortraitUpsideDown:
+                        offset = rect.height * offsetUnit;
+                        break;
+                    case ScreenDirection.LandscapeRight:
+                    case ScreenDirection.LandscapeLeft:
+                        offset = rect.width * offsetUnit;
+                        break;
+                }
             }
-            else
-            {
-                AdjustSize(0);
-            }
+            AdjustSize(offset, screenDirection);
         }
 
-        private void AdjustSize(float topOffset)
+        private void AdjustSize(float offset, ScreenDirection dir)
         {
             rectTransform.anchorMin = Vector2.zero;
             rectTransform.anchorMax = Vector2.one;
-            rectTransform.sizeDelta = new Vector2(0, -topOffset);
-            rectTransform.anchoredPosition = new Vector2(0, -topOffset / 2f);
+            switch (dir)
+            {
+                case ScreenDirection.Portrait:
+                    rectTransform.sizeDelta = new Vector2(0, -offset);
+                    rectTransform.anchoredPosition = new Vector2(0, -offset / 2f);
+                    break;
+                case ScreenDirection.PortraitUpsideDown:
+                    rectTransform.sizeDelta = new Vector2(0, -offset);
+                    rectTransform.anchoredPosition = new Vector2(0, offset / 2f);
+                    break;
+                case ScreenDirection.LandscapeRight:
+                    rectTransform.sizeDelta = new Vector2(-offset, 0);
+                    rectTransform.anchoredPosition = new Vector2(-offset / 2f, 0);
+                    break;
+                case ScreenDirection.LandscapeLeft:
+                    rectTransform.sizeDelta = new Vector2(-offset, 0);
+                    rectTransform.anchoredPosition = new Vector2(offset / 2f, 0);
+                    break;
+            }
         }
 
         private Canvas GetCanvasInGrandpar()

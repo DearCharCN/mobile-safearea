@@ -13,31 +13,12 @@ namespace SafeArea
 #if UNITY_EDITOR
             return EditorUnit;
 #endif
-            switch (Application.platform)
-            {
-                case RuntimePlatform.Android:
-                    return GetOffsetUnitOnAndroid();
-                case RuntimePlatform.WindowsPlayer:
-                    return GetOffsetUnitOnWindows();
-                case RuntimePlatform.IPhonePlayer:
-                    return GetOffsetUnitOnApple();
-            }
-            return 0;
-        }
-
-        private static float GetOffsetUnitOnAndroid()
-        {
             return NativeBridge.getOutsideHeightUnit();
         }
 
-        private static float GetOffsetUnitOnWindows()
+        public static ScreenDirection GetScreenDirection()
         {
-            return 0;
-        }
-
-        private static float GetOffsetUnitOnApple()
-        {
-            return NativeBridge.getOutsideHeightUnit();
+            return NativeBridge.getScreenDirection();
         }
     }
 }
