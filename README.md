@@ -1,4 +1,4 @@
-# mobile-safearea
+# mobile-safearea [View English README](README_EN.md)
 这是一个Unity插件，帮助程序判断当前设备是否有刘海，以及刘海的高度等。
 
 ## 功能
