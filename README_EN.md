@@ -24,7 +24,6 @@ float unit = SafeAreaUtls.GetTopOffsetUnit();
 ```csharp
 private void Start()
 {
-    sb = new StringBuilder();
     SafeAreaUtls.AddResolutionChanged(OnResolutionChanged);
 }
 
